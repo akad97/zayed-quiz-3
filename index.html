@@ -1,0 +1,602 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Examen — IA et Codage informatique · Séances 4 et 5 | امتحان</title>
+<style>
+  :root {
+    --navy: #1B1F3B; --navy-2: #2A2F55; --orange: #E76F51; --teal: #2A9D8F; --gold: #E9C46A;
+    --ink: #1B1F3B; --muted: #5B6075; --line: #DDE1E8; --bg: #F1F3F7; --card: #FFFFFF;
+    --ok: #2A9D8F; --ko: #D1495B;
+    --ar-font: "Segoe UI", Tahoma, "Noto Naskh Arabic", "Noto Sans Arabic", "Geeza Pro", Arial, "DejaVu Sans", sans-serif;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; }
+  body {
+    font-family: "Segoe UI", Calibri, system-ui, -apple-system, Roboto, Arial, sans-serif;
+    background: var(--bg); color: var(--ink); line-height: 1.5;
+    -webkit-user-select: none; user-select: none;
+  }
+  input { -webkit-user-select: text; user-select: text; }
+  .hidden { display: none !important; }
+  .wrap { max-width: 880px; margin: 0 auto; padding: 24px 16px 48px; }
+
+  /* Texte arabe : sous le français, aligné à droite */
+  .ar { display: block; direction: rtl; text-align: right; font-family: var(--ar-font); unicode-bidi: plaintext; }
+  .ar-in { direction: rtl; font-family: var(--ar-font); unicode-bidi: isolate; }
+  .center .ar, .btn .ar, .modal .ar { text-align: center; }
+  .btn .ar { font-weight: 600; font-size: .92em; }
+  .sub-ar { color: var(--muted); font-size: .95em; margin-top: 2px; }
+
+  /* ---------- Accueil ---------- */
+  .hero { background: var(--navy); color: #fff; }
+  .hero .wrap { padding-top: 36px; padding-bottom: 32px; }
+  .kicker { color: var(--gold); font-weight: 700; font-size: 14px; letter-spacing: .03em; }
+  .kicker .ar { letter-spacing: 0; }
+  h1 { font-size: clamp(26px, 5vw, 38px); margin: 8px 0 4px; line-height: 1.2; }
+  h1 .ar { font-size: .8em; color: #fff; margin-top: 2px; }
+  .hero p { margin: 4px 0 0; color: #C9CDE0; }
+  .facts { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-top: 22px; }
+  .fact { background: var(--navy-2); border-radius: 12px; padding: 14px 16px; }
+  .fact b { display: block; font-size: 26px; color: #fff; }
+  .fact span { font-size: 13px; color: #C9CDE0; display: block; }
+  .card { background: var(--card); border-radius: 14px; box-shadow: 0 2px 10px rgba(27,31,59,.06); padding: 24px; margin-top: 20px; }
+  .card h2 { margin: 0 0 14px; font-size: 20px; display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+  .card h2 .ar-in { color: var(--muted); }
+  .rules { margin: 0; padding: 0; list-style: none; counter-reset: r; }
+  .rules li { padding: 10px 0 10px 34px; border-top: 1px solid var(--line); position: relative; counter-increment: r; }
+  .rules li:first-child { border-top: 0; }
+  .rules li::before { content: counter(r); position: absolute; left: 0; top: 11px; width: 24px; height: 24px; border-radius: 50%; background: var(--bg); color: var(--orange); font-weight: 800; font-size: 13px; display: grid; place-items: center; }
+  .rules strong { color: var(--orange); }
+  .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+  label.f { display: flex; justify-content: space-between; gap: 8px; font-size: 14px; font-weight: 600; margin-bottom: 4px; }
+  label.f .ar-in { color: var(--muted); font-weight: 600; }
+  input[type=text] { width: 100%; padding: 11px 12px; border: 1.5px solid var(--line); border-radius: 10px; font: inherit; color: var(--ink); background: #fff; }
+  input[type=text]:focus { outline: none; border-color: var(--teal); }
+  .check { display: flex; gap: 10px; align-items: flex-start; margin-top: 16px; font-size: 15px; cursor: pointer; }
+  .check input { margin-top: 4px; width: 18px; height: 18px; accent-color: var(--teal); flex: none; }
+  .check > span { flex: 1; }
+  .err { color: var(--ko); font-size: 14px; margin-top: 10px; min-height: 20px; }
+  .btn { border: 0; border-radius: 10px; padding: 10px 18px; font: inherit; font-weight: 700; cursor: pointer; transition: transform .05s, opacity .15s; line-height: 1.3; }
+  .btn:active { transform: translateY(1px); }
+  .btn:disabled { opacity: .4; cursor: not-allowed; }
+  .btn-main { background: var(--orange); color: #fff; }
+  .btn-sec { background: var(--bg); color: var(--ink); }
+  .btn-teal { background: var(--teal); color: #fff; }
+  .btn-block { width: 100%; padding: 12px; font-size: 17px; margin-top: 8px; }
+
+  /* ---------- Examen ---------- */
+  .bar { position: sticky; top: 0; z-index: 10; background: var(--navy); color: #fff; }
+  .bar .in { max-width: 880px; margin: 0 auto; padding: 10px 16px; display: flex; align-items: center; gap: 12px; }
+  .who { flex: 1; min-width: 0; font-size: 14px; color: #C9CDE0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .who b { color: #fff; }
+  .pill { background: var(--navy-2); border-radius: 999px; padding: 6px 12px; font-size: 13px; white-space: nowrap; }
+  .pill.warn { background: var(--orange); }
+  .timer { font-variant-numeric: tabular-nums; font-weight: 800; font-size: 20px; background: var(--navy-2); border-radius: 10px; padding: 4px 12px; min-width: 88px; text-align: center; }
+  .timer.low { background: var(--ko); animation: pulse 1s infinite; }
+  @keyframes pulse { 50% { opacity: .75; } }
+  .progress { height: 6px; background: var(--navy-2); }
+  .progress i { display: block; height: 100%; width: 0; background: var(--teal); transition: width .3s; }
+
+  .qnum { color: var(--orange); font-weight: 800; font-size: 15px; display: flex; justify-content: space-between; gap: 12px; }
+  .qtext { font-size: 20px; font-weight: 700; margin: 6px 0 14px; }
+  .qtext .ar { font-size: .95em; font-weight: 700; margin-top: 6px; }
+  pre.code { background: var(--navy); color: #F1F3F7; border-radius: 10px; padding: 14px 16px; overflow-x: auto; font: 14px/1.5 "Courier New", Consolas, monospace; margin: 0 0 16px; direction: ltr; text-align: left; }
+  .opts { display: grid; gap: 10px; }
+  .opt { display: flex; gap: 12px; align-items: flex-start; text-align: left; width: 100%; background: #fff; border: 1.5px solid var(--line); border-radius: 12px; padding: 12px 14px; font: inherit; color: var(--ink); cursor: pointer; }
+  .opt:hover { border-color: var(--teal); }
+  .opt .l { flex: none; width: 28px; height: 28px; border-radius: 50%; background: var(--bg); display: grid; place-items: center; font-weight: 800; font-size: 14px; }
+  .opt .t { flex: 1; min-width: 0; }
+  .opt .ar { color: var(--muted); margin-top: 3px; }
+  .opt.sel { border-color: var(--teal); background: #E8F5F3; }
+  .opt.sel .l { background: var(--teal); color: #fff; }
+  .nav { display: flex; justify-content: space-between; gap: 10px; margin-top: 20px; }
+  .palette { display: grid; grid-template-columns: repeat(10, 1fr); gap: 8px; }
+  .palette button { aspect-ratio: 1; border: 1.5px solid var(--line); border-radius: 8px; background: #fff; font: inherit; font-weight: 700; cursor: pointer; color: var(--muted); }
+  .palette button.done { background: var(--teal); border-color: var(--teal); color: #fff; }
+  .palette button.cur { outline: 3px solid var(--orange); outline-offset: 1px; }
+  .legend { font-size: 13px; color: var(--muted); margin-top: 10px; }
+
+  /* ---------- Modales ---------- */
+  .overlay { position: fixed; inset: 0; background: rgba(27,31,59,.72); display: grid; place-items: center; z-index: 100; padding: 16px; }
+  .modal { background: #fff; border-radius: 16px; max-width: 480px; width: 100%; padding: 26px; text-align: center; }
+  .modal h3 { margin: 6px 0 10px; font-size: 22px; }
+  .modal p { color: var(--muted); margin: 0 0 18px; }
+  .modal .big { font-size: 44px; }
+  .modal .row { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; }
+  .modal.alert h3 { color: var(--ko); }
+
+  /* ---------- Résultats ---------- */
+  .score { display: grid; grid-template-columns: auto 1fr; gap: 24px; align-items: center; }
+  .ring { width: 150px; height: 150px; border-radius: 50%; display: grid; place-items: center; background: conic-gradient(var(--teal) calc(var(--p) * 1%), var(--bg) 0); }
+  .ring > div { width: 118px; height: 118px; border-radius: 50%; background: #fff; display: grid; place-items: center; text-align: center; }
+  .ring b { font-size: 36px; line-height: 1; }
+  .ring span { font-size: 13px; color: var(--muted); display: block; }
+  table.kv { width: 100%; border-collapse: collapse; font-size: 15px; }
+  table.kv td { padding: 6px 0; border-bottom: 1px solid var(--line); vertical-align: top; }
+  table.kv td:first-child .ar-in { color: var(--muted); font-size: 13px; margin-left: 6px; }
+  table.kv td:last-child { text-align: right; font-weight: 700; }
+  .rev { border-top: 1px solid var(--line); padding: 14px 0; }
+  .rev:first-child { border-top: 0; }
+  .rev .t { font-weight: 700; }
+  .tag { display: inline-block; font-size: 12px; font-weight: 800; border-radius: 6px; padding: 2px 8px; margin-right: 6px; color: #fff; }
+  .tag.ok { background: var(--ok); } .tag.ko { background: var(--ko); } .tag.na { background: var(--muted); }
+  .ans { font-size: 14px; margin-top: 6px; color: var(--muted); }
+  .ans b.ok { color: var(--ok); } .ans b.ko { color: var(--ko); }
+  .ex { font-size: 14px; margin-top: 8px; padding: 8px 12px; background: var(--bg); border-left: 3px solid var(--teal); border-radius: 6px; color: var(--ink); }
+  .ex .ar { color: var(--muted); margin-top: 4px; }
+  .verif { font-family: "Courier New", monospace; font-weight: 700; letter-spacing: .08em; }
+  .actions { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 18px; }
+  .send { margin-top: 16px; padding: 12px 14px; border-radius: 10px; background: var(--bg); font-size: 15px; font-weight: 600; }
+  .send.ok { background: #E8F5F3; color: var(--ok); }
+  .send.wait { background: #FCEBE6; color: #A8432A; }
+  .send .btn { margin-top: 10px; }
+  .teacher { margin-top: 28px; text-align: center; }
+  .teacher button { background: none; border: 0; color: var(--muted); font-size: 12px; text-decoration: underline; cursor: pointer; }
+
+  @media (max-width: 640px) {
+    .facts { grid-template-columns: 1fr; }
+    .grid2 { grid-template-columns: 1fr; }
+    .palette { grid-template-columns: repeat(5, 1fr); }
+    .score { grid-template-columns: 1fr; justify-items: center; }
+    .who { display: none; }
+    .qtext { font-size: 18px; }
+    .pill { font-size: 12px; padding: 5px 9px; }
+  }
+  @media print {
+    body { background: #fff; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    .bar, .overlay, .actions, .teacher, #start, #exam { display: none !important; }
+    .card { box-shadow: none; border: 1px solid var(--line); break-inside: avoid; }
+  }
+</style>
+</head>
+<body oncontextmenu="return false">
+
+<!-- ================= ACCUEIL ================= -->
+<section id="start">
+  <div class="hero"><div class="wrap">
+    <div class="kicker">IA et Codage informatique · Informatique de gestion<span class="ar">الذكاء الاصطناعي والبرمجة · المعلوماتية الإدارية</span></div>
+    <h1>Évaluation — Séances 4 et 5<span class="ar">التقييم — الحصتان 4 و 5</span></h1>
+    <p>Travailler avec l’IA : bases de données (SQL, Java) et programmation objet (Copilot)<span class="ar">العمل مع الذكاء الاصطناعي: قواعد البيانات والبرمجة الكائنية</span></p>
+    <div class="facts">
+      <div class="fact"><b>15</b><span>questions à choix unique</span><span class="ar">سؤالًا ذا اختيار واحد</span></div>
+      <div class="fact"><b>20 min</b><span>chronomètre non suspendable</span><span class="ar">20 دقيقة · مؤقت لا يمكن إيقافه</span></div>
+      <div class="fact"><b>/ 20</b><span>note = bonnes réponses × 20 ÷ 15</span><span class="ar">العلامة = الإجابات الصحيحة × 20 ÷ 15</span></div>
+    </div>
+  </div></div>
+  <div class="wrap">
+    <div class="card">
+      <h2><span>Règlement de l’examen</span><span class="ar-in">نظام الامتحان</span></h2>
+      <ul class="rules" id="rules"></ul>
+    </div>
+    <div class="card">
+      <h2><span>Identification</span><span class="ar-in">بيانات الطالب</span></h2>
+      <div class="grid2">
+        <div><label class="f" for="nom"><span>Nom *</span><span class="ar-in">اللقب *</span></label><input type="text" id="nom" autocomplete="off"></div>
+        <div><label class="f" for="prenom"><span>Prénom *</span><span class="ar-in">الاسم *</span></label><input type="text" id="prenom" autocomplete="off"></div>
+        <div style="grid-column:1/-1"><label class="f" for="groupe"><span>Classe / groupe *</span><span class="ar-in">القسم / الفوج *</span></label><input type="text" id="groupe" autocomplete="off"></div>
+      </div>
+      <label class="check"><input type="checkbox" id="accept"><span>J’ai lu le règlement et je m’engage à le respecter.<span class="ar">قرأتُ نظام الامتحان وألتزم باحترامه.</span></span></label>
+      <div class="err" id="startErr"></div>
+      <button class="btn btn-main btn-block" id="btnStart">Commencer l’examen<span class="ar">ابدأ الامتحان</span></button>
+    </div>
+  </div>
+</section>
+
+<!-- ================= EXAMEN ================= -->
+<section id="exam" class="hidden">
+  <div class="bar">
+    <div class="in">
+      <div class="who" id="who"></div>
+      <div class="pill" id="answered">0 / 15</div>
+      <div class="pill" id="exits"></div>
+      <div class="timer" id="timer">20:00</div>
+    </div>
+    <div class="progress"><i id="prog"></i></div>
+  </div>
+  <div class="wrap">
+    <div class="card">
+      <div class="qnum"><span id="qnumFr"></span><span class="ar-in" id="qnumAr"></span></div>
+      <div class="qtext"><span id="qtext"></span><span class="ar" id="qtextAr" lang="ar"></span></div>
+      <pre class="code hidden" id="qcode"></pre>
+      <div class="opts" id="opts"></div>
+      <div class="nav">
+        <button class="btn btn-sec" id="prev">← Précédente<span class="ar">السابق</span></button>
+        <button class="btn btn-teal" id="next"></button>
+      </div>
+    </div>
+    <div class="card">
+      <h2><span>Navigation</span><span class="ar-in">التنقّل بين الأسئلة</span></h2>
+      <div class="palette" id="palette"></div>
+      <div class="legend">En vert : question répondue. Vous pouvez revenir sur une question tant que la copie n’est pas remise.<span class="ar">باللون الأخضر: سؤال تمت الإجابة عنه. يمكنك العودة إلى أي سؤال ما دامت الورقة لم تُسلَّم.</span></div>
+      <button class="btn btn-main btn-block" id="btnFinish" style="margin-top:16px">Remettre ma copie<span class="ar">تسليم ورقتي</span></button>
+    </div>
+  </div>
+</section>
+
+<!-- ================= RÉSULTATS ================= -->
+<section id="result" class="hidden">
+  <div class="hero"><div class="wrap">
+    <div class="kicker">IA et Codage informatique · Séances 4 et 5<span class="ar">الذكاء الاصطناعي والبرمجة · الحصتان 4 و 5</span></div>
+    <h1>Copie remise<span class="ar">تم تسليم الورقة</span></h1>
+    <p><span id="endReason"></span><span class="ar" id="endReasonAr"></span></p>
+  </div></div>
+  <div class="wrap">
+    <div class="card">
+      <div class="score">
+        <div class="ring" id="ring"><div><div><b id="final"></b><span>sur 20</span><span class="ar-in" style="font-size:13px;color:var(--muted)">من 20</span></div></div></div>
+        <table class="kv" id="kv"></table>
+      </div>
+      <div class="actions">
+        <button class="btn btn-teal" onclick="window.print()">Imprimer / enregistrer en PDF<span class="ar">طباعة / حفظ بصيغة PDF</span></button>
+      </div>
+      <div class="send hidden" id="sendBox">
+        <span id="sendText"></span><span class="ar" id="sendTextAr"></span>
+        <button class="btn btn-sec hidden" id="btnResend">Réessayer l’envoi<span class="ar">إعادة محاولة الإرسال</span></button>
+      </div>
+    </div>
+    <div class="card" id="reviewCard">
+      <h2><span>Correction</span><span class="ar-in">التصحيح</span></h2>
+      <div id="review"></div>
+    </div>
+    <div class="teacher"><button id="btnReset">Réinitialiser (enseignant) · إعادة التهيئة (الأستاذ)</button></div>
+  </div>
+</section>
+
+<!-- ================= MODALES ================= -->
+<div class="overlay hidden" id="mExit">
+  <div class="modal alert">
+    <div class="big">⚠️</div>
+    <h3>Sortie détectée<span class="ar">تم رصد خروج من الصفحة</span></h3>
+    <p><span id="mExitText"></span><span class="ar" id="mExitTextAr"></span></p>
+    <div class="row"><button class="btn btn-main" id="btnBack">Revenir à l’examen<span class="ar">العودة إلى الامتحان</span></button></div>
+  </div>
+</div>
+<div class="overlay hidden" id="mConfirm">
+  <div class="modal">
+    <div class="big">📝</div>
+    <h3>Remettre votre copie ?<span class="ar">هل تريد تسليم ورقتك؟</span></h3>
+    <p><span id="mConfirmText"></span><span class="ar" id="mConfirmTextAr"></span></p>
+    <div class="row">
+      <button class="btn btn-sec" id="btnCancel">Continuer l’examen<span class="ar">مواصلة الامتحان</span></button>
+      <button class="btn btn-main" id="btnSubmit">Remettre<span class="ar">تسليم</span></button>
+    </div>
+  </div>
+</div>
+
+<script>
+(() => {
+  'use strict';
+  // ===================== PARAMÈTRES =====================
+  const CONFIG = {
+    DUREE_MIN: 20,               // durée de l’examen en minutes
+    MAX_SORTIES: 3,              // nombre de sorties avant remise automatique
+    PENALITE_PAR_SORTIE: 1,      // points retirés par sortie
+    AFFICHER_CORRECTION: true,   // afficher la correction détaillée à la fin
+    CODE_ENSEIGNANT: 'AKAD2026', // code pour réinitialiser un poste
+    POINTS_PAR_QUESTION: 20 / 15, // 15 questions : note ramenée sur 20
+    CLE: 'iacodage_s45_exam_v1',  // identifiant de sauvegarde sur le poste
+    EXAMEN: 'IA et Codage — Séances 4 et 5',
+    // Adresse de l’application Web Google Apps Script (se termine par /exec).
+    // Laisser vide pour ne rien envoyer.
+    URL_GOOGLE_SHEET: 'https://script.google.com/macros/s/AKfycbzWWEqnTD64pFKAwJ8bqASDBVs7wVD9uXmufMQaE1bPzLfF4WRz2UzBYITpyBNmaXTU7A/exec'
+  };
+  // ======================================================
+
+  const Q = [{"q":"L’IA propose les tables de la base de données. Que faut-il faire avant de les créer ?","qa":"يقترح الذكاء الاصطناعي جداول قاعدة البيانات. ماذا يجب أن نفعل قبل إنشائها؟","c":null,"o":["Tout accepter sans lire","Vérifier le schéma qu’elle propose","Changer de logiciel","Effacer la base"],"oa":["قبول كل شيء دون قراءة","التحقق من المخطط الذي يقترحه","تغيير البرنامج","حذف القاعدة"],"e":"Un schéma mal pensé oblige à tout refaire. On le vérifie avant de créer les tables.","ea":"المخطط السيئ يجبرنا على إعادة كل شيء. نتحقق منه قبل إنشاء الجداول."},{"q":"Pourquoi écrire « MySQL » dans le prompt quand on demande une requête ?","qa":"لماذا نكتب «⁦MySQL⁩» في الموجِّه عندما نطلب استعلامًا؟","c":null,"o":["Sinon l’IA peut écrire pour un autre logiciel et la requête ne marche pas","Pour avoir une réponse plus courte","Pour que l’IA réponde plus vite","Parce que c’est le mot de passe de la base"],"oa":["وإلا قد يكتب الذكاء الاصطناعي لبرنامج آخر فلا يعمل الاستعلام","للحصول على إجابة أقصر","ليجيب الذكاء الاصطناعي بسرعة أكبر","لأنها كلمة مرور القاعدة"],"e":"Il existe plusieurs logiciels de bases de données. Si on ne précise pas lequel, l’IA peut se tromper de version.","ea":"توجد عدة برامج لقواعد البيانات. إذا لم نحدّد أيّها، قد يخطئ الذكاء الاصطناعي في الصيغة."},{"q":"Quel prompt est le plus clair ?","qa":"أيّ موجِّه هو الأوضح؟","c":null,"o":["« Fais une requête. »","« Aide-moi en SQL. »","« Base MySQL avec les tables client et vente. Donne le total des achats de chaque client. »","« Dis-moi tout sur les bases de données. »"],"oa":["«اكتب استعلامًا.»","«ساعدني في ⁦SQL⁩.»","«قاعدة ⁦MySQL⁩ فيها الجدولان ⁦client⁩ و ⁦vente⁩. أعطِ مجموع مشتريات كل زبون.»","«قل لي كل شيء عن قواعد البيانات.»"],"e":"Un bon prompt dit quel logiciel, quelles tables et quel résultat on veut. L’IA n’a plus rien à deviner.","ea":"الموجِّه الجيد يذكر البرنامج والجداول والنتيجة المطلوبة. فلا يبقى للذكاء الاصطناعي ما يخمّنه."},{"q":"Comment savoir si la requête donnée par l’IA est juste ?","qa":"كيف نعرف أن الاستعلام الذي أعطاه الذكاء الاصطناعي صحيح؟","c":null,"o":["Demander à l’IA si elle est juste","Regarder si elle est longue","La recopier deux fois","Comparer son résultat avec un résultat calculé à la main"],"oa":["سؤال الذكاء الاصطناعي هل هو صحيح","النظر هل هو طويل","نسخه مرتين","مقارنة نتيجته بنتيجة محسوبة يدويًا"],"e":"L’IA dit presque toujours que son travail est juste. Seule la comparaison avec un résultat connu le prouve.","ea":"يقول الذكاء الاصطناعي دائمًا تقريبًا إن عمله صحيح. وحدها المقارنة بنتيجة معروفة تثبت ذلك."},{"q":"La requête de l’IA s’exécute, mais le total est faux. Que faire ?","qa":"يُنفَّذ استعلام الذكاء الاصطناعي، لكن المجموع خاطئ. ماذا نفعل؟","c":null,"o":["L’accepter, puisqu’il n’y a pas d’erreur","Dire à l’IA le résultat obtenu et le résultat attendu","Modifier les données pour avoir le bon total","Abandonner l’exercice"],"oa":["قبوله، لأنه لا يوجد خطأ","إخبار الذكاء الاصطناعي بالنتيجة المحصّلة والنتيجة المنتظرة","تغيير المعطيات للحصول على المجموع الصحيح","التخلّي عن التمرين"],"e":"Une bonne relance est précise : voici ce que j’obtiens, voici ce que j’attends.","ea":"إعادة الطلب الجيدة دقيقة: هذا ما أحصل عليه، وهذا ما أنتظره."},{"q":"phpMyAdmin affiche un message d’erreur. Que faut-il donner à l’IA ?","qa":"يعرض ⁦phpMyAdmin⁩ رسالة خطأ. ماذا يجب أن نعطي للذكاء الاصطناعي؟","c":null,"o":["La requête et le message d’erreur complet","Seulement « ça ne marche pas »","Une photo de l’écran d’accueil","Rien, elle trouvera seule"],"oa":["الاستعلام ورسالة الخطأ كاملة","فقط «لا يعمل»","صورة لشاشة البداية","لا شيء، سيجد الحل وحده"],"e":"Avec le message exact, l’IA voit où est le problème. Sans lui, elle corrige au hasard.","ea":"مع الرسالة الدقيقة يرى الذكاء الاصطناعي مكان المشكلة. ودونها يصحّح عشوائيًا."},{"q":"Peut-on coller dans l’IA les vrais noms et téléphones des clients d’une entreprise ?","qa":"هل يمكن أن نلصق في الذكاء الاصطناعي الأسماء والهواتف الحقيقية لزبائن مؤسسة؟","c":null,"o":["Oui, toujours","Oui, si la liste est courte","Non : on donne seulement la structure des tables et des exemples inventés","Oui, si on les efface ensuite"],"oa":["نعم، دائمًا","نعم، إذا كانت القائمة قصيرة","لا: نعطي فقط بنية الجداول وأمثلة مختلَقة","نعم، إذا حذفناها بعد ذلك"],"e":"Les données personnelles des clients ne se partagent pas avec un outil en ligne. L’IA n’a besoin que de la structure.","ea":"المعطيات الشخصية للزبائن لا تُشارَك مع أداة على الإنترنت. والذكاء الاصطناعي لا يحتاج إلا إلى البنية."},{"q":"L’IA donne un programme qui marche, mais l’enseignant dit qu’il n’est pas sécurisé. Que faire ?","qa":"يعطي الذكاء الاصطناعي برنامجًا يعمل، لكن الأستاذ يقول إنه غير آمن. ماذا نفعل؟","c":null,"o":["Le garder, puisqu’il marche","Supprimer la base de données","Ne rien dire à personne","Demander à l’IA une version sécurisée, puis la tester"],"oa":["الاحتفاظ به لأنه يعمل","حذف قاعدة البيانات","عدم إخبار أي أحد","طلب نسخة آمنة من الذكاء الاصطناعي ثم اختبارها"],"e":"« Ça marche » ne veut pas dire « c’est sûr ». L’IA n’ajoute pas toujours la sécurité si on ne la demande pas.","ea":"«يعمل» لا يعني «آمن». لا يضيف الذكاء الاصطناعي الحماية دائمًا إذا لم نطلبها."},{"q":"Dans VS Code, que fait GitHub Copilot ?","qa":"في ⁦VS Code⁩، ماذا يفعل ⁦GitHub Copilot⁩؟","c":null,"o":["Il propose la suite du code pendant qu’on écrit","Il installe Java","Il corrige seul toutes les erreurs","Il remplace l’étudiant à l’examen"],"oa":["يقترح بقية الشيفرة أثناء الكتابة","يثبّت ⁦Java⁩","يصحّح وحده كل الأخطاء","يعوّض الطالب في الامتحان"],"e":"Copilot est un assistant : il propose, c’est vous qui décidez.","ea":"⁦Copilot⁩ مساعد: هو يقترح، وأنت من يقرّر."},{"q":"Copilot affiche une proposition en gris. Que faire avant de l’accepter ?","qa":"يعرض ⁦Copilot⁩ اقتراحًا باللون الرمادي. ماذا نفعل قبل قبوله؟","c":null,"o":["L’accepter toujours","La lire et vérifier qu’on la comprend","L’effacer toujours","Fermer VS Code"],"oa":["قبوله دائمًا","قراءته والتأكد من أننا نفهمه","حذفه دائمًا","إغلاق ⁦VS Code⁩"],"e":"On n’accepte que du code qu’on sait expliquer.","ea":"لا نقبل إلا شيفرة نعرف كيف نشرحها."},{"q":"Copilot propose tout le programme d’un seul coup. Que vaut-il mieux faire ?","qa":"يقترح ⁦Copilot⁩ البرنامج كله دفعة واحدة. ما الأفضل؟","c":null,"o":["Tout accepter pour gagner du temps","Demander encore plus de code","Avancer par petites étapes et tester chaque étape","Copier le code dans un fichier Word"],"oa":["قبول كل شيء لربح الوقت","طلب شيفرة أكثر","التقدّم بخطوات صغيرة واختبار كل خطوة","نسخ الشيفرة في ملف ⁦Word⁩"],"e":"Une petite étape se lit et se teste facilement. Un gros bloc accepté sans lecture devient impossible à corriger.","ea":"الخطوة الصغيرة تُقرأ وتُختبر بسهولة. أما الكتلة الكبيرة المقبولة دون قراءة فيصعب تصحيحها."},{"q":"L’IA utilise une méthode qui n’existe pas dans le projet. Comment appelle-t-on cette erreur fréquente ?","qa":"يستعمل الذكاء الاصطناعي دالة غير موجودة في المشروع. ماذا نسمّي هذا الخطأ الشائع؟","c":null,"o":["Une mise à jour","Une sauvegarde","Un virus","Une invention (on dit aussi « hallucination »)"],"oa":["تحديث","حفظ","فيروس","اختلاق (يُقال أيضًا «هلوسة»)"],"e":"L’IA peut inventer des noms qui semblent vrais. On vérifie toujours dans le projet.","ea":"قد يختلق الذكاء الاصطناعي أسماء تبدو حقيقية. نتحقق دائمًا داخل المشروع."},{"q":"Pour un petit carnet de recettes et de dépenses, l’IA ajoute des mots de passe et une fenêtre graphique. Que faire ?","qa":"لدفتر صغير للمداخيل والمصاريف، يضيف الذكاء الاصطناعي كلمات مرور ونافذة رسومية. ماذا نفعل؟","c":null,"o":["Garder seulement ce que demande le cahier des charges","Tout garder","Demander encore plus de fonctions","Abandonner le projet"],"oa":["الإبقاء فقط على ما يطلبه دفتر الشروط","الإبقاء على كل شيء","طلب وظائف أكثر","التخلّي عن المشروع"],"e":"L’IA ajoute souvent des choses inutiles. C’est le besoin du client qui décide, pas l’IA.","ea":"يضيف الذكاء الاصطناعي غالبًا أشياء غير مفيدة. حاجة الزبون هي التي تقرّر، لا الذكاء الاصطناعي."},{"q":"Vous ne comprenez pas un morceau de code écrit par l’IA. Que faire ?","qa":"لا تفهم جزءًا من الشيفرة كتبه الذكاء الاصطناعي. ماذا تفعل؟","c":null,"o":["L’accepter quand même","Demander à l’IA de l’expliquer, puis le tester","Le cacher à l’enseignant","Le supprimer sans chercher à comprendre"],"oa":["قبوله رغم ذلك","طلب شرحه من الذكاء الاصطناعي ثم اختباره","إخفاؤه عن الأستاذ","حذفه دون محاولة الفهم"],"e":"À la soutenance, on vous demandera d’expliquer votre code. L’IA peut servir de professeur.","ea":"في المناقشة سيُطلب منك شرح شيفرتك. ويمكن أن يكون الذكاء الاصطناعي أستاذًا لك."},{"q":"Que faut-il noter dans le carnet de prompts ?","qa":"ماذا يجب أن نسجّل في دفتر الموجِّهات؟","c":null,"o":["Seulement la date","Tout le code produit par l’IA","Les prompts utiles, les erreurs de l’IA et ce que j’ai appris","Rien, il n’est pas noté"],"oa":["التاريخ فقط","كل الشيفرة التي أنتجها الذكاء الاصطناعي","الموجِّهات المفيدة، وأخطاء الذكاء الاصطناعي، وما تعلّمته","لا شيء، فهو لا يُقيَّم"],"e":"Le carnet montre votre progression. Il compte dans la note.","ea":"الدفتر يُظهر تقدّمك، وهو محسوب في العلامة."}];
+  const K = 'CjBXeZ7E6w0zWX+hx+0T';
+  const KEY = (() => { const b = atob(K); return Array.from(b, (c, i) => (c.charCodeAt(0) ^ ((i * 37 + 11) & 255))); })();
+
+  const $ = id => document.getElementById(id);
+  const store = {
+    get() { try { return JSON.parse(localStorage.getItem(CONFIG.CLE)); } catch (e) { return null; } },
+    set(v) { try { localStorage.setItem(CONFIG.CLE, JSON.stringify(v)); } catch (e) {} },
+    clear() { try { localStorage.removeItem(CONFIG.CLE); } catch (e) {} }
+  };
+  let S = null, tick = null, away = false, lastExitAt = 0;
+
+  // ---------- éléments bilingues ----------
+  function el(tag, cls, text) { const e = document.createElement(tag); if (cls) e.className = cls; if (text !== undefined) e.textContent = text; return e; }
+  function arSpan(text, cls) { const s = el('span', cls || 'ar', text); s.lang = 'ar'; s.dir = 'rtl'; return s; }
+  function setBi(node, fr, ar) { node.textContent = ''; node.appendChild(document.createTextNode(fr)); node.appendChild(arSpan(ar)); }
+
+  // ---------- règlement ----------
+  (function rules() {
+    const pen = CONFIG.PENALITE_PAR_SORTIE, max = CONFIG.MAX_SORTIES;
+    const penFr = pen + (pen > 1 ? ' points' : ' point');
+    const penAr = pen === 1 ? 'نقطة واحدة' : pen === 2 ? 'نقطتين' : pen + ' نقاط';
+    const R = [
+      ['L’examen se déroule <strong>en plein écran</strong>. Ne quittez pas cette page.', 'يُجرى الامتحان في <strong>وضع ملء الشاشة</strong>. لا تغادر هذه الصفحة.'],
+      ['Changer d’onglet, de fenêtre ou quitter le plein écran est une <strong>sortie</strong> : chaque sortie retire <strong>' + penFr + '</strong>.',
+       'تغيير علامة التبويب أو النافذة أو الخروج من وضع ملء الشاشة يُعدّ <strong>خروجًا</strong>: كل خروج يُنقص <strong>' + penAr + '</strong>.'],
+      ['À la <strong>' + max + '<sup>e</sup> sortie</strong>, votre copie est remise automatiquement.', 'عند <strong>الخروج رقم ' + max + '</strong>، تُسلَّم ورقتك تلقائيًا.'],
+      ['Recharger la page ne remet pas le chronomètre à zéro et compte comme une sortie.', 'إعادة تحميل الصفحة لا تُعيد المؤقت إلى الصفر وتُحسب خروجًا.'],
+      ['À la fin du temps, la copie est remise automatiquement avec les réponses déjà cochées.', 'عند انتهاء الوقت، تُسلَّم الورقة تلقائيًا مع الإجابات التي تم اختيارها.'],
+      ['L’usage de l’IA, de notes ou du téléphone est interdit pendant l’examen.', 'يُمنع استعمال الذكاء الاصطناعي أو الملاحظات أو الهاتف أثناء الامتحان.']
+    ];
+    const ul = $('rules');
+    R.forEach(([fr, ar]) => { const li = el('li'); li.innerHTML = fr + '<span class="ar" lang="ar" dir="rtl">' + ar + '</span>'; ul.appendChild(li); });
+  })();
+
+  // ---------- utilitaires ----------
+  function shuffle(a) { a = a.slice(); for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; }
+  function fmt(ms) { const s = Math.max(0, Math.ceil(ms / 1000)); return String(Math.floor(s / 60)).padStart(2, '0') + ':' + String(s % 60).padStart(2, '0'); }
+  function save() { store.set(S); }
+  function hash(str) { let h = 5381; for (let i = 0; i < str.length; i++) h = ((h << 5) + h + str.charCodeAt(i)) >>> 0; return h.toString(36).toUpperCase().padStart(7, '0').slice(-7); }
+  const fsOK = () => !!(document.documentElement.requestFullscreen || document.documentElement.webkitRequestFullscreen);
+  const inFS = () => !!(document.fullscreenElement || document.webkitFullscreenElement);
+  function goFS() {
+    const e = document.documentElement;
+    try { const r = (e.requestFullscreen || e.webkitRequestFullscreen).call(e); if (r && r.catch) r.catch(() => {}); } catch (x) {}
+  }
+  function show(id) { ['start', 'exam', 'result'].forEach(s => $(s).classList.toggle('hidden', s !== id)); window.scrollTo(0, 0); }
+  function startError(fr, ar) { setBi($('startErr'), fr, ar); }
+
+  // ---------- envoi vers Google Sheets ----------
+  function newId() { try { if (crypto.randomUUID) return crypto.randomUUID(); } catch (e) {} return Date.now().toString(36) + Math.random().toString(36).slice(2, 10); }
+  function verifCode() { const r = S.result, st = S.student; return hash([st.nom, st.prenom, st.groupe, r.raw, r.pen, r.final, S.exits, r.at].join('|')); }
+  const OUT = CONFIG.CLE + '_envoi';
+  const outbox = {
+    get() { try { return JSON.parse(localStorage.getItem(OUT)) || []; } catch (e) { return []; } },
+    set(v) { try { localStorage.setItem(OUT, JSON.stringify(v)); } catch (e) {} }
+  };
+  function send(type, extra) {
+    if (!CONFIG.URL_GOOGLE_SHEET || !S) return;
+    const msg = Object.assign({ type, id: S.id, at: new Date().toISOString(), examen: CONFIG.EXAMEN,
+      nom: S.student.nom, prenom: S.student.prenom, groupe: S.student.groupe }, extra || {});
+    const q = outbox.get(); q.push(msg); outbox.set(q);
+    flush();
+  }
+  let flushing = false;
+  async function flush() {
+    if (!CONFIG.URL_GOOGLE_SHEET || flushing) return;
+    flushing = true;
+    try {
+      for (;;) {
+        const q = outbox.get(); if (!q.length) break;
+        await fetch(CONFIG.URL_GOOGLE_SHEET, { method: 'POST', mode: 'no-cors', keepalive: true,
+          headers: { 'Content-Type': 'text/plain;charset=utf-8' }, body: JSON.stringify(q[0]) });
+        const q2 = outbox.get(); q2.shift(); outbox.set(q2);
+      }
+    } catch (e) { /* hors connexion : nouvel essai plus tard */ }
+    flushing = false;
+    sendStatus();
+  }
+  function sendStatus() {
+    const box = $('sendBox');
+    if (!CONFIG.URL_GOOGLE_SHEET || !S || S.status !== 'done') { box.classList.add('hidden'); return; }
+    const pending = outbox.get().some(m => m.type === 'resultat' && m.id === S.id);
+    box.classList.remove('hidden'); box.classList.toggle('ok', !pending); box.classList.toggle('wait', pending);
+    $('btnResend').classList.toggle('hidden', !pending);
+    $('sendText').textContent = pending ? 'Résultat pas encore envoyé à l’enseignant (pas de connexion). Nouvel essai automatique toutes les 15 secondes : gardez cette page ouverte.' : 'Résultat envoyé à l’enseignant ✓';
+    $('sendTextAr').textContent = pending ? 'لم تُرسَل النتيجة إلى الأستاذ بعد (لا يوجد اتصال). تُعاد المحاولة تلقائيًا كل 15 ثانية: أبقِ هذه الصفحة مفتوحة.' : 'تم إرسال النتيجة إلى الأستاذ ✓';
+  }
+  $('btnResend').addEventListener('click', flush);
+  setInterval(flush, 15000);
+  window.addEventListener('online', flush);
+
+  // ---------- démarrage ----------
+  $('btnStart').addEventListener('click', () => {
+    const v = k => $(k).value.trim();
+    if (!v('nom') || !v('prenom') || !v('groupe')) { startError('Remplissez tous les champs d’identification.', 'املأ جميع خانات التعريف.'); return; }
+    if (!$('accept').checked) { startError('Vous devez accepter le règlement pour commencer.', 'يجب قبول نظام الامتحان للبدء.'); return; }
+    goFS();
+    const order = shuffle(Q.map((_, i) => i));
+    S = {
+      id: newId(),
+      student: { nom: v('nom').toUpperCase(), prenom: v('prenom'), groupe: v('groupe') },
+      order, opts: order.map(i => shuffle(Q[i].o.map((_, j) => j))),
+      answers: {}, cur: 0, exits: 0, exitLog: [],
+      startedAt: Date.now(), endAt: Date.now() + CONFIG.DUREE_MIN * 60000,
+      status: 'running'
+    };
+    save();
+    send('debut', { detail: 'Début de l’examen' });
+    startExam();
+  });
+
+  function startExam() {
+    show('exam');
+    const w = $('who'); w.textContent = '';
+    w.appendChild(el('b', '', S.student.prenom + ' ' + S.student.nom));
+    w.appendChild(document.createTextNode(' · ' + S.student.groupe));
+    buildPalette(); render(); updateTop();
+    clearInterval(tick); tick = setInterval(onTick, 250); onTick();
+  }
+
+  // ---------- affichage d’une question ----------
+  function render() {
+    const qi = S.order[S.cur], q = Q[qi];
+    $('qnumFr').textContent = 'Question ' + (S.cur + 1) + ' sur ' + Q.length;
+    $('qnumAr').textContent = 'السؤال ' + (S.cur + 1) + ' من ' + Q.length;
+    $('qtext').textContent = q.q;
+    $('qtextAr').textContent = q.qa;
+    $('qcode').classList.toggle('hidden', !q.c); $('qcode').textContent = q.c || '';
+    const box = $('opts'); box.innerHTML = '';
+    S.opts[S.cur].forEach((oi, k) => {
+      const b = el('button', 'opt' + (S.answers[qi] === oi ? ' sel' : ''));
+      b.appendChild(el('span', 'l', 'ABCD'[k]));
+      const t = el('span', 't'); t.appendChild(el('span', '', q.o[oi]));
+      if (q.oa[oi] && q.oa[oi] !== q.o[oi]) t.appendChild(arSpan(q.oa[oi]));
+      b.appendChild(t);
+      b.addEventListener('click', () => { S.answers[qi] = oi; save(); render(); updateTop(); });
+      box.appendChild(b);
+    });
+    $('prev').disabled = S.cur === 0;
+    if (S.cur === Q.length - 1) setBi($('next'), 'Terminer', 'إنهاء'); else setBi($('next'), 'Suivante →', 'التالي');
+    [...$('palette').children].forEach((b, i) => { b.classList.toggle('cur', i === S.cur); b.classList.toggle('done', S.answers[S.order[i]] !== undefined); });
+  }
+  function buildPalette() {
+    const p = $('palette'); p.innerHTML = '';
+    S.order.forEach((_, i) => { const b = el('button', '', String(i + 1)); b.addEventListener('click', () => { S.cur = i; save(); render(); }); p.appendChild(b); });
+  }
+  $('prev').addEventListener('click', () => { if (S.cur > 0) { S.cur--; save(); render(); } });
+  $('next').addEventListener('click', () => { if (S.cur < Q.length - 1) { S.cur++; save(); render(); } else askFinish(); });
+  function updateTop() {
+    const n = Object.keys(S.answers).length;
+    $('answered').textContent = n + ' / ' + Q.length;
+    $('prog').style.width = (n / Q.length * 100) + '%';
+    const ex = $('exits'); ex.textContent = 'Sorties · '; ex.appendChild(arSpan('الخروج', 'ar-in')); ex.appendChild(document.createTextNode(' : ' + S.exits + ' / ' + CONFIG.MAX_SORTIES));
+    $('exits').classList.toggle('warn', S.exits > 0);
+  }
+
+  // ---------- chronomètre ----------
+  function onTick() {
+    if (!S || S.status !== 'running') return;
+    const left = S.endAt - Date.now();
+    $('timer').textContent = fmt(left);
+    $('timer').classList.toggle('low', left <= 120000);
+    if (left <= 0) finish('temps');
+  }
+
+  // ---------- remise ----------
+  function askFinish() {
+    const miss = Q.length - Object.keys(S.answers).length;
+    if (miss) {
+      $('mConfirmText').textContent = 'Attention : ' + miss + ' question' + (miss > 1 ? 's' : '') + ' sans réponse. Une fois remise, la copie ne peut plus être modifiée.';
+      $('mConfirmTextAr').textContent = 'تنبيه: ' + miss + (miss === 1 ? ' سؤال' : miss === 2 ? ' سؤالان' : miss <= 10 ? ' أسئلة' : ' سؤالًا') + ' بلا إجابة. بعد التسليم لا يمكن تعديل الورقة.';
+    } else {
+      $('mConfirmText').textContent = 'Toutes les questions ont une réponse. Une fois remise, la copie ne peut plus être modifiée.';
+      $('mConfirmTextAr').textContent = 'تمت الإجابة عن جميع الأسئلة. بعد التسليم لا يمكن تعديل الورقة.';
+    }
+    $('mConfirm').classList.remove('hidden');
+  }
+  $('btnFinish').addEventListener('click', askFinish);
+  $('btnCancel').addEventListener('click', () => $('mConfirm').classList.add('hidden'));
+  $('btnSubmit').addEventListener('click', () => finish('remise'));
+
+  function finish(reason) {
+    if (!S || S.status !== 'running') return;
+    clearInterval(tick);
+    let raw = 0;
+    Q.forEach((_, i) => { if (S.answers[i] === KEY[i]) raw++; });
+    const pen = S.exits * CONFIG.PENALITE_PAR_SORTIE;
+    S.result = { raw, pen, final: Math.max(0, Math.round((raw * CONFIG.POINTS_PAR_QUESTION - pen) * 100) / 100), reason, at: Date.now(), used: Math.min(Date.now(), S.endAt) - S.startedAt };
+    S.status = 'done';
+    save();
+    const fin = new Date(S.result.at), deb = new Date(S.startedAt);
+    const payload = {
+      brutes: raw, sorties: S.exits, penalite: pen, note: S.result.final, temps: fmt(S.result.used), motif: reason,
+      code: verifCode(), debut: deb.toISOString(),
+      journal: S.exitLog.map(x => x.kind + ' ' + new Date(x.at).toLocaleTimeString('fr-FR')).join(' ; ')
+    };
+    Q.forEach((_, i) => { payload['q' + (i + 1)] = S.answers[i] === undefined ? '' : (S.answers[i] === KEY[i] ? 1 : 0); });
+    send('resultat', payload);
+    ['mExit', 'mConfirm'].forEach(m => $(m).classList.add('hidden'));
+    try { if (inFS()) (document.exitFullscreen || document.webkitExitFullscreen).call(document); } catch (e) {}
+    showResult();
+  }
+
+  function showResult() {
+    show('result');
+    const r = S.result, st = S.student;
+    const reasons = {
+      remise: ['Copie remise par l’étudiant.', 'سلّم الطالب ورقته.'],
+      temps: ['Temps écoulé : copie remise automatiquement.', 'انتهى الوقت: سُلِّمت الورقة تلقائيًا.'],
+      sorties: ['Nombre maximal de sorties atteint : copie remise automatiquement.', 'تم بلوغ الحد الأقصى لمرات الخروج: سُلِّمت الورقة تلقائيًا.']
+    };
+    const rr = reasons[r.reason] || ['', ''];
+    $('endReason').textContent = rr[0]; $('endReasonAr').textContent = rr[1];
+    $('final').textContent = String(r.final).replace('.', ',');
+    $('ring').style.setProperty('--p', r.final / 20 * 100);
+    const d = new Date(r.at);
+    const code = verifCode();
+    const rows = [
+      ['Étudiant', 'الطالب', st.prenom + ' ' + st.nom], ['Classe / groupe', 'القسم / الفوج', st.groupe],
+      ['Bonnes réponses', 'الإجابات الصحيحة', r.raw + ' / ' + Q.length], ['Sorties de page', 'مرات الخروج', S.exits],
+      ['Pénalité', 'الخصم', r.pen ? '− ' + r.pen : '0'], ['Note finale', 'العلامة النهائية', String(r.final).replace('.', ',') + ' / 20'],
+      ['Temps utilisé', 'الوقت المستغرق', fmt(r.used)], ['Remise le', 'تاريخ التسليم', d.toLocaleDateString('fr-FR') + ' à ' + d.toLocaleTimeString('fr-FR')],
+      ['Code de vérification', 'رمز التحقق', code]
+    ];
+    const kv = $('kv'); kv.innerHTML = '';
+    rows.forEach(([fr, ar, val]) => {
+      const tr = kv.insertRow(); const a = tr.insertCell();
+      a.appendChild(document.createTextNode(fr)); a.appendChild(arSpan(ar, 'ar-in'));
+      const c = tr.insertCell(); c.textContent = val; if (fr === 'Code de vérification') c.className = 'verif';
+    });
+
+    sendStatus();
+    $('reviewCard').classList.toggle('hidden', !CONFIG.AFFICHER_CORRECTION);
+    if (CONFIG.AFFICHER_CORRECTION) {
+      const box = $('review'); box.innerHTML = '';
+      Q.forEach((q, i) => {
+        const a = S.answers[i], ok = a === KEY[i];
+        const div = el('div', 'rev');
+        const t = el('div', 't');
+        const tag = el('span', 'tag ' + (a === undefined ? 'na' : ok ? 'ok' : 'ko'), a === undefined ? 'Sans réponse · بلا إجابة' : ok ? 'Juste · صحيح' : 'Faux · خطأ');
+        t.appendChild(tag); t.appendChild(document.createTextNode((i + 1) + '. ' + q.q)); t.appendChild(arSpan(q.qa));
+        div.appendChild(t);
+        const line = (labFr, labAr, idx, cls) => {
+          const p = el('div', 'ans');
+          p.appendChild(document.createTextNode(labFr + ' : ')); p.appendChild(el('b', cls, q.o[idx]));
+          const arTxt = (q.oa[idx] && q.oa[idx] !== q.o[idx]) ? q.oa[idx] : q.o[idx];
+          const s = arSpan(labAr + ': ' ); s.appendChild(el('b', cls, arTxt)); p.appendChild(s);
+          div.appendChild(p);
+        };
+        if (a !== undefined && !ok) line('Votre réponse', 'إجابتك', a, 'ko');
+        line('Bonne réponse', 'الإجابة الصحيحة', KEY[i], 'ok');
+        if (q.e) { const x = el('div', 'ex', q.e); if (q.ea) x.appendChild(arSpan(q.ea)); div.appendChild(x); }
+        box.appendChild(div);
+      });
+    }
+  }
+
+  // ---------- détection des sorties ----------
+  // Une sortie est comptée après un court délai : si la page est en train d’être
+  // rechargée ou fermée, c’est la reprise au rechargement qui la compte (une seule fois).
+  let pending = null, unloading = false;
+  window.addEventListener('pagehide', () => { unloading = true; clearTimeout(pending); pending = null; });
+  function onExit(kind) {
+    if (!S || S.status !== 'running' || away || unloading || pending) return;
+    pending = setTimeout(() => { pending = null; if (!unloading) countExit(kind); }, 350);
+  }
+  function countExit(kind) {
+    if (!S || S.status !== 'running' || away) return;
+    const now = Date.now();
+    if (now - lastExitAt < 1500) return;      // un seul comptage par sortie
+    lastExitAt = now; away = true;
+    S.exits++; S.exitLog.push({ kind, at: now }); save(); updateTop();
+    send('sortie', { detail: 'Sortie ' + S.exits + ' / ' + CONFIG.MAX_SORTIES + ' (' + kind + ')' });
+    if (S.exits >= CONFIG.MAX_SORTIES) { finish('sorties'); return; }
+    const reste = CONFIG.MAX_SORTIES - S.exits, pen = CONFIG.PENALITE_PAR_SORTIE;
+    $('mExitText').textContent = 'Sortie ' + S.exits + ' sur ' + CONFIG.MAX_SORTIES + ' : ' + pen + (pen > 1 ? ' points retirés. ' : ' point retiré. ') +
+      (reste === 1 ? 'À la prochaine sortie, votre copie sera remise automatiquement.' : 'Encore ' + reste + ' sorties et votre copie sera remise automatiquement.') + ' Le chronomètre continue.';
+    $('mExitTextAr').textContent = 'الخروج ' + S.exits + ' من ' + CONFIG.MAX_SORTIES + ': ' + (pen === 1 ? 'خُصمت نقطة واحدة. ' : 'خُصمت ' + pen + ' نقاط. ') +
+      (reste === 1 ? 'عند الخروج التالي ستُسلَّم ورقتك تلقائيًا.' : 'بعد ' + reste + ' مرات خروج أخرى ستُسلَّم ورقتك تلقائيًا.') + ' المؤقت مستمر.';
+    $('mExit').classList.remove('hidden');
+  }
+  $('btnBack').addEventListener('click', () => { $('mExit').classList.add('hidden'); away = false; goFS(); });
+  document.addEventListener('visibilitychange', () => { if (document.hidden) onExit('onglet'); });
+  window.addEventListener('blur', () => onExit('fenêtre'));
+  ['fullscreenchange', 'webkitfullscreenchange'].forEach(ev => document.addEventListener(ev, () => { if (!inFS() && fsOK()) onExit('plein écran'); }));
+  window.addEventListener('beforeunload', e => { if (S && S.status === 'running') { e.preventDefault(); e.returnValue = ''; } });
+
+  // ---------- blocages clavier / copier-coller ----------
+  ['copy', 'cut', 'paste', 'dragstart', 'selectstart'].forEach(ev => document.addEventListener(ev, e => { if (!(e.target.matches && e.target.matches('input'))) e.preventDefault(); }));
+  document.addEventListener('keydown', e => {
+    const k = (e.key || '').toLowerCase();
+    if (k === 'f12' || ((e.ctrlKey || e.metaKey) && ['c', 'x', 'v', 'a', 'p', 's', 'u'].includes(k) && !(e.target.matches && e.target.matches('input'))) ||
+        ((e.ctrlKey || e.metaKey) && e.shiftKey && ['i', 'j', 'c'].includes(k))) { e.preventDefault(); e.stopPropagation(); }
+  }, true);
+
+  // ---------- réinitialisation enseignant ----------
+  $('btnReset').addEventListener('click', () => {
+    const c = prompt('Code enseignant · رمز الأستاذ :');
+    if (c === CONFIG.CODE_ENSEIGNANT) { store.clear(); location.reload(); }
+    else if (c !== null) alert('Code incorrect · رمز غير صحيح');
+  });
+
+  // ---------- reprise après rechargement ----------
+  flush();
+  const saved = store.get();
+  if (saved && saved.status === 'done') { S = saved; showResult(); }
+  else if (saved && saved.status === 'running') {
+    S = saved;
+    if (Date.now() >= S.endAt) { startExam(); finish('temps'); }
+    else { startExam(); away = false; lastExitAt = 0; countExit('rechargement'); }
+  }
+})();
+</script>
+</body>
+</html>
